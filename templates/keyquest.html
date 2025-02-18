@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Concepts and Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 12px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+        select {
+            background: white;
+            color: black;
+            cursor: pointer;
+        }
+        select:hover {
+            background: #f0f0f0;
+        }
+        button {
+            background-color: #ff9800;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #e68900;
+        }
+        .questions {
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 5px solid #ff5722;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .question strong {
+            color: #d84315;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Programming Concepts and Questions</h1>
+
+<div class="controls">
+    <label for="language">Choose Language:</label>
+    <select id="language" onchange="updateConcepts()">
+        <option value="C">C</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+    </select>
+
+    <label for="concept">Choose Concept:</label>
+    <select id="concept">
+        <option value="">Select a concept</option>
+    </select>
+
+    <button onclick="showQuestionAnswer()">Get Questions</button>
+</div>
+
+<div id="question-answer-section" class="questions" style="display:none;">
+    <h2>Key Questions</h2>
+    <div id="question-answer"></div>
+</div>
+
+<script>
+    const concepts = {
+        "C": ["Pointers", "Memory Management", "Recursion", "Data Structures", "File Handling"],
+        "Python": ["Functions", "Exception Handling", "OOP", "Data Types", "Decorators"],
+        "Java": ["Inheritance", "Polymorphism", "Exceptions", "Threads", "Collections"]
+    };
+
+    const questions = {
+        "C": {
+            "Pointers": [
+                { question: "What is a pointer?", answer: "A pointer holds the address of another variable." },
+                { question: "How do you declare a pointer?", answer: "Using the '*' symbol, e.g., int *ptr;" },
+                { question: "What is NULL pointer?", answer: "A pointer that does not point to any valid memory address." },
+                { question: "What is pointer arithmetic?", answer: "Performing operations like increment, decrement on pointers." },
+                { question: "What is a dangling pointer?", answer: "A pointer pointing to a freed memory location." }
+            ],
+            "Memory Management": [
+                { question: "What is malloc() used for?", answer: "It dynamically allocates memory during runtime." },
+                { question: "Difference between malloc() and calloc()?", answer: "calloc() initializes allocated memory to zero, malloc() does not." },
+                { question: "What is free() used for?", answer: "It deallocates dynamically allocated memory." },
+                { question: "What is stack memory?", answer: "Memory used for function calls and local variables." },
+                { question: "What is heap memory?", answer: "Memory dynamically allocated during runtime." }
+            ]
+        },
+        "Python": {
+            "Functions": [
+                { question: "What is a lambda function?", answer: "A small anonymous function defined using 'lambda'." },
+                { question: "What is *args used for?", answer: "It allows passing multiple arguments as a tuple." },
+                { question: "What is **kwargs used for?", answer: "It allows passing multiple keyword arguments as a dictionary." },
+                { question: "What is the difference between function and method?", answer: "A function is independent, whereas a method is part of a class." },
+                { question: "What is recursion?", answer: "A function calling itself to solve a problem." }
+            ]
+        },
+        "Java": {
+            "Inheritance": [
+                { question: "What is single inheritance?", answer: "A subclass inherits from a single superclass." },
+                { question: "What is multiple inheritance in Java?", answer: "Java does not support multiple inheritance, but it can be achieved using interfaces." },
+                { question: "What is method overriding?", answer: "Redefining a method in a subclass that exists in a parent class." },
+                { question: "What is the super keyword?", answer: "Used to call the parent class constructor or method." },
+                { question: "What is hierarchical inheritance?", answer: "Multiple classes inherit from a single parent class." }
+            ]
+        }
+    };
+
+    function updateConcepts() {
+        const language = document.getElementById('language').value;
+        const conceptSelect = document.getElementById('concept');
+        conceptSelect.innerHTML = '<option value="">Select a concept</option>';
+
+        if (concepts[language]) {
+            concepts[language].forEach(concept => {
+                const option = document.createElement('option');
+                option.value = concept;
+                option.textContent = concept;
+                conceptSelect.appendChild(option);
+            });
+        }
+    }
+
+    function showQuestionAnswer() {
+        const language = document.getElementById('language').value;
+        const concept = document.getElementById('concept').value;
+        const questionAnswerSection = document.getElementById('question-answer-section');
+        const questionAnswerDiv = document.getElementById('question-answer');
+
+        questionAnswerDiv.innerHTML = '';
+
+        if (language && concept && questions[language] && questions[language][concept]) {
+            questions[language][concept].forEach(qa => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<strong>Q: ${qa.question}</strong><br><em>A: ${qa.answer}</em>`;
+                questionAnswerDiv.appendChild(questionDiv);
+            });
+
+            questionAnswerSection.style.display = "block";
+        } else {
+            questionAnswerSection.style.display = "none";
+        }
+    }
+
+    window.onload = updateConcepts;
+</script>
+
+</body>
+</html>
